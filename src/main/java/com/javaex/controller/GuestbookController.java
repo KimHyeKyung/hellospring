@@ -47,14 +47,10 @@ public class GuestbookController {
 		return "/WEB-INF/views/deleteform.jsp";
 	}
 	
-	//삭제
+	//삭제 @ModelAttribute 이용
 	@RequestMapping(value = "/gbDelete", method = RequestMethod.POST)
-	public String delete(@RequestParam("no") int no, @RequestParam("password") String password) {
-		GuestbookVo vo = new GuestbookVo();
-		vo.setNo(no);
-		vo.setPassword(password);
+	public String delete(@ModelAttribute GuestbookVo vo) {
 		int result = guestbookDao.delete(vo);
-		
 		if(result > 0) {
 			return "redirect:/getGuestbookList";
 		}else {
@@ -63,6 +59,22 @@ public class GuestbookController {
 		
 	}
 	
+	//삭제 (@RequestParam)이용
+//	@RequestMapping(value = "/gbDelete", method = RequestMethod.POST)
+//	public String delete(@RequestParam("no") int no, @RequestParam("password") String password) {
+//		GuestbookVo vo = new GuestbookVo();
+//		vo.setNo(no);
+//		vo.setPassword(password);
+//		int result = guestbookDao.delete(vo);
+//		
+//		if(result > 0) {
+//			return "redirect:/getGuestbookList";
+//		}else {
+//			return "/WEB-INF/views/deleteError.jsp";
+//		}
+//		
+//	}
 	
+
 	
 }

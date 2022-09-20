@@ -4,17 +4,26 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="GuestBookXml">
-  
-  <!-- 쿼리문 작성  -->
-  <select id="selectList" resultType="guestbooklist">
-    select  no, 
-            name, 
-            password, 
-            content, 
-            reg_date as regDate
-      from  guestbook
-    order by reg_date desc
-  </select>
-  
 
+	<!-- 쿼리문 작성 -->
+	<select id="selectList" resultType="guestbooklist">
+		select 	no,
+				name,
+				password,
+				content,
+				to_char(reg_date,'yyyy-mm-dd') as regDate
+		from guestbook
+		order by reg_date desc
+	</select>
+	
+	<insert id="insert" parameterType="guestbooklist">
+		insert into guestbook(no, name, password, content, reg_date)
+		values(seq_guestbook_no.nextval, #{name}, #{password}, #{content}, sysdate)
+	</insert>
+	
+	<delete id="delete" parameterType="guestbooklist">
+		delete from guestbook
+		where no = #{no} and password = #{password}
+	</delete>
+	
 </mapper>

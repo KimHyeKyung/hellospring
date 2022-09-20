@@ -11,16 +11,24 @@ import com.javaex.vo.GuestbookVo;
 
 @Repository
 public class GuestbookDao {
-  
-  @Autowired
-  private SqlSession sqlSession;
 
-  
-  public List<GuestbookVo> getList(){
-    System.out.println("----> sqlSession.selectList()");
-    System.out.println(sqlSession);
+	// SqlSessionTemplate를 DI한다.
+	@Autowired
+	private SqlSession sqlSession;
 
-    return sqlSession.selectList("GuestBookXml.selectList");
-  }
-  
+	public List<GuestbookVo> getList() {
+		System.out.println("----> sqlSession.selectList()");
+		return sqlSession.selectList("GuestBookXml.selectList");
+	}
+
+	//등록
+	public int insert(GuestbookVo guestbookVo) {
+		return sqlSession.insert("GuestBookXml.insert",guestbookVo);
+	}
+	
+	//삭제
+	public int delete(GuestbookVo vo) {
+		return sqlSession.delete("GuestBookXml.delete",vo);		
+	}
+
 }

@@ -1,3 +1,4 @@
+
 package com.javaex.controller;
 
 import java.lang.ProcessBuilder.Redirect;
@@ -18,7 +19,8 @@ import com.javaex.vo.GuestbookVo;
 public class GuestbookController {
 
 	// GuestbookDao guestbookDao = new GuestbookDao();으로 원래 객체생성을 했지만
-	// DI(객체 주입)으로인해 @Autowired로 자동으로 new키워드로 객체생성을 한것처럼 작동한다.
+	// DI(객체주입)으로인해@Autowired로 자동으로 new키워드로객체생성을 한것처럼 작동한다.
+
 	@Autowired
 	GuestbookDao guestbookDao;
 
@@ -27,29 +29,46 @@ public class GuestbookController {
 		System.out.println(">>> " + this.getClass() + " 호출됨!");
 		mav.addObject("guestbookList", guestbookDao.getList());
 		mav.setViewName("/WEB-INF/views/getGuestbookList.jsp");
-		
+
 		return mav;
 	}
-	
-	//삽입
+
+	// 삽입
+
 	@RequestMapping(value = "/addGuestbook", method = RequestMethod.POST)
 	public String add(@ModelAttribute GuestbookVo guestbookVo) {
 		System.out.println(guestbookVo);
 		guestbookDao.insert(guestbookVo);
-		
+
 		return "redirect:/getGuestbookList";
 	}
-	
-	//삭제확인폼 이동
+
+	// 삭제확인폼 이동
 	@RequestMapping(value = "/gbDeleteConfirm/{no}", method = RequestMethod.GET)
 	public String deleteConfirm(@PathVariable("no") int no) {
-		
-		return "/WEB-INF/views/deleteform.jsp";
-	}
+ 
+		return "/WEB-INF/views/deleteform.jsp"; 
+	} 
 	
-	//삭제 @ModelAttribute 이용
+	// 삭제 @ModelAttribute 이용 //@ModelAttribute : 알아서 get/set호출해줌!!
 	@RequestMapping(value = "/gbDelete", method = RequestMethod.POST)
 	public String delete(@ModelAttribute GuestbookVo vo) {
+		int result = guestbookDao.delete(vo);
+		if (result > 0) {
+			return "redirect:/getGuestbookList";
+		} else {
+			return "/WEB-INF/views/deleteError.jsp";
+		}
+
+	}
+
+	// 삭제 (@RequestParam)이용
+/*	@RequestMapping(value = "/gbDelete", method =RequestMethod.POST)
+	public String delete(@RequestParam("no") int no, @RequestParam("password") String password) { 
+		GuestbookVo vo = new GuestbookVo();
+		vo.setNo(no);
+		vo.setPassword(password);
+		
 		int result = guestbookDao.delete(vo);
 		if(result > 0) {
 			return "redirect:/getGuestbookList";
@@ -57,24 +76,8 @@ public class GuestbookController {
 			return "/WEB-INF/views/deleteError.jsp";
 		}
 		
-	}
-	
-	//삭제 (@RequestParam)이용
-//	@RequestMapping(value = "/gbDelete", method = RequestMethod.POST)
-//	public String delete(@RequestParam("no") int no, @RequestParam("password") String password) {
-//		GuestbookVo vo = new GuestbookVo();
-//		vo.setNo(no);
-//		vo.setPassword(password);
-//		int result = guestbookDao.delete(vo);
-//		
-//		if(result > 0) {
-//			return "redirect:/getGuestbookList";
-//		}else {
-//			return "/WEB-INF/views/deleteError.jsp";
-//		}
-//		
-//	}
-	
-
-	
-}
+	  } 
+*/ 
+ 
+ 
+ }
